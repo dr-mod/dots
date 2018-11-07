@@ -1,5 +1,6 @@
 package core;
 
+import model.Brain;
 import model.Dot;
 import model.Goal;
 import utils.Vector;
@@ -35,15 +36,23 @@ public class GenerationHandler {
                 .mapToDouble(DotHolder::getFitness)
                 .reduce(0, (x, y) -> x + y);
 
+        Dot[] dots = generateNewDots(fitnessEnrichedDots, fitnessSum);
+
+        return dots;
+    }
+
+    private Dot[] generateNewDots(List<DotHolder> fitnessEnrichedDots, float fitnessSum) {
         Dot[] dots = new Dot[this.swarm.getDots().length];
         Dot previousBestDot = bestDot;
         dots[0] = swarm.newDot(previousBestDot.getBrain().cloneBrain()).toBestDot();
 
         for (int i = 1; i < dots.length; i++) {
-            DotHolder ancestor = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
-            dots[i] = swarm.newDot(ancestor.getDot().getBrain().mutatedBrain());
-        }
+            DotHolder ancestor1 = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
+            DotHolder ancestor2 = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
+            Brain mergedBrain = Brain.mergeBrains(ancestor1.getDot().getBrain(), ancestor2.getDot().getBrain());
 
+            dots[i] = swarm.newDot(mergedBrain.mutatedBrain());
+        }
         return dots;
     }
 
@@ -65,6 +74,14 @@ public class GenerationHandler {
 
         return dotHolders.get(0);
     }
+
+//    private float calculateFitness(Dot dot) {
+//        float fitness = dot.getPath().stream()
+//                .map((v) -> 1.0f / Vector.dist(v, new Vector(goal.getX(), goal.getY())))
+//                .reduce(0.0f, (accumulator, elem) -> accumulator + elem);
+//
+//        return fitness;
+//    }
 
     private float calculateFitness(Dot dot) {
         float fitness;

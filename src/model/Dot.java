@@ -3,6 +3,9 @@ package model;
 import presentation.Graphics;
 import utils.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Dot implements Drawable {
 
@@ -13,6 +16,7 @@ public class Dot implements Drawable {
     protected Vector position;
     private Vector velocity = new Vector(0, 0);
     private Brain brain;
+    private List<Vector> path = new ArrayList<>(MAX_NUMBER_OF_STEPS);
 
     private boolean stop = false;
     private boolean goalReached = false;
@@ -35,6 +39,7 @@ public class Dot implements Drawable {
     public void update() {
         if (stop) return;
         move();
+        path.add(position);
     }
 
     private void move() {
@@ -77,11 +82,15 @@ public class Dot implements Drawable {
         this.goalReached = true;
     }
 
+    public List<Vector> getPath() {
+        return path;
+    }
+
     public Dot toBestDot() {
         return new BestDot(brain, (int) position.x, (int) position.y);
     }
-
     static public class BestDot extends Dot {
+
 
         public BestDot(Brain brain, int x, int y) {
             super(brain, x, y);

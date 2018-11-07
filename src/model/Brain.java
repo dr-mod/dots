@@ -25,24 +25,46 @@ public class Brain {
         return directions.length > step;
     }
 
-    public int getStep(){
+    public int getStep() {
         return step;
     }
 
     public Brain cloneBrain() {
         Vector[] newDirections = new Vector[this.directions.length];
-        for(int i = 0; i < newDirections.length; i++) {
+        for (int i = 0; i < newDirections.length; i++) {
             newDirections[i] = this.directions[i].copy();
         }
         return new Brain(newDirections);
     }
 
+    public static Brain mergeBrains(Brain brain, Brain brain2) {
+        final int PORTION = 20;
+        if (brain.directions.length != brain2.directions.length)
+            throw new IllegalArgumentException("Brains' direction lengths are different.");
+        if (brain.directions.length % PORTION != 0)
+            throw new RuntimeException("Brain's direction length cannot be divided by " + PORTION);
+
+        var mergedDirections = new Vector[brain.directions.length];
+        for (int i = 0; i < mergedDirections.length; i += PORTION) {
+            double random = Math.random();
+            if (random < 0.9) {
+                System.arraycopy(brain.directions, i, mergedDirections, i, PORTION);
+            } else {
+                System.arraycopy(brain2.directions, i, mergedDirections, i, PORTION);
+            }
+        }
+
+        return new Brain(mergedDirections);
+    }
+
     public Brain mutatedBrain() {
         double mutationRate = 0.02;
         Brain brain = cloneBrain();
-        for(int i = 0; i < brain.directions.length; i++) {
-            double rand = Math.random();
-            if( rand <= mutationRate) {
+        for (int i = 0; i < brain.directions.length; i++) {
+            double mutationRand = Math.random();
+            if (mutationRand <= mutationRate) {
+//                double rotation = (Math.random() * Math.PI) - Math.PI / 2.0;
+//                brain.directions[i].rotate((float) rotation);
                 brain.directions[i] = randomVector();
             }
         }
@@ -54,6 +76,6 @@ public class Brain {
     }
 
     private Vector randomVector() {
-        return Vector.fromAngle( (float) (Math.random() * 2 * Math.PI) );
+        return Vector.fromAngle((float) (Math.random() * 2 * Math.PI));
     }
 }

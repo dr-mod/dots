@@ -23,17 +23,24 @@ public class Vector implements Serializable {
     }
 
     static public Vector fromAngle(float angle) {
-        return fromAngle(angle,null);
+        return fromAngle(angle, null);
     }
 
 
     static public Vector fromAngle(float angle, Vector target) {
         if (target == null) {
-            target = new Vector((float)Math.cos(angle),(float)Math.sin(angle));
+            target = new Vector((float) Math.cos(angle), (float) Math.sin(angle));
         } else {
-            target.set((float)Math.cos(angle),(float)Math.sin(angle));
+            target.set((float) Math.cos(angle), (float) Math.sin(angle));
         }
         return target;
+    }
+
+    public Vector rotate(float theta) {
+        float temp = x;
+        x = x * (float) Math.cos(theta) - y * (float) Math.sin(theta);
+        y = temp * (float) Math.sin(theta) + y * (float) Math.cos(theta);
+        return this;
     }
 
     public Vector copy() {
@@ -42,7 +49,7 @@ public class Vector implements Serializable {
 
     public float[] get(float[] target) {
         if (target == null) {
-            return new float[] { x, y };
+            return new float[]{x, y};
         }
         if (target.length >= 2) {
             target[0] = x;
@@ -52,11 +59,11 @@ public class Vector implements Serializable {
     }
 
     public float mag() {
-        return (float) Math.sqrt(x*x + y*y);
+        return (float) Math.sqrt(x * x + y * y);
     }
 
     public float magSq() {
-        return (x*x + y*y);
+        return (x * x + y * y);
     }
 
     public Vector add(Vector v) {
@@ -77,7 +84,7 @@ public class Vector implements Serializable {
 
     static public Vector add(Vector v1, Vector v2, Vector target) {
         if (target == null) {
-            target = new Vector(v1.x + v2.x,v1.y + v2.y);
+            target = new Vector(v1.x + v2.x, v1.y + v2.y);
         } else {
             target.set(v1.x + v2.x, v1.y + v2.y);
         }
@@ -87,25 +94,25 @@ public class Vector implements Serializable {
     public float dist(Vector v) {
         float dx = x - v.x;
         float dy = y - v.y;
-        return (float) Math.sqrt(dx*dx + dy*dy);
+        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     static public float dist(Vector v1, Vector v2) {
         float dx = v1.x - v2.x;
         float dy = v1.y - v2.y;
-        return (float) Math.sqrt(dx*dx + dy*dy);
+        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     public float dot(Vector v) {
-        return x*v.x + y*v.y;
+        return x * v.x + y * v.y;
     }
 
     public float dot(float x, float y, float z) {
-        return this.x*x + this.y*y;
+        return this.x * x + this.y * y;
     }
 
     static public float dot(Vector v1, Vector v2) {
-        return v1.x*v2.x + v1.y*v2.y;
+        return v1.x * v2.x + v1.y * v2.y;
     }
 
     public Vector normalize(Vector target) {
@@ -114,7 +121,7 @@ public class Vector implements Serializable {
         }
         float m = mag();
         if (m > 0) {
-            target.set(x/m, y/m);
+            target.set(x / m, y / m);
         } else {
             target.set(x, y);
         }
@@ -133,15 +140,15 @@ public class Vector implements Serializable {
 
     static public Vector mult(Vector v, float n, Vector target) {
         if (target == null) {
-            target = new Vector(v.x*n, v.y*n);
+            target = new Vector(v.x * n, v.y * n);
         } else {
-            target.set(v.x*n, v.y*n);
+            target.set(v.x * n, v.y * n);
         }
         return target;
     }
 
     public Vector limit(float max) {
-        if (magSq() > max*max) {
+        if (magSq() > max * max) {
             normalize();
             mult(max);
         }
@@ -168,9 +175,9 @@ public class Vector implements Serializable {
 
     static public Vector div(Vector v, float n, Vector target) {
         if (target == null) {
-            target = new Vector(v.x/n, v.y/n);
+            target = new Vector(v.x / n, v.y / n);
         } else {
-            target.set(v.x/n, v.y/n);
+            target.set(v.x / n, v.y / n);
         }
         return target;
     }
