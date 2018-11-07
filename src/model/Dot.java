@@ -17,13 +17,13 @@ public class Dot implements Drawable {
     private boolean stop = false;
     private boolean goalReached = false;
 
-    public Dot() {
-        this(new Brain(MAX_NUMBER_OF_STEPS));
+    public Dot(int x, int y) {
+        this(new Brain(MAX_NUMBER_OF_STEPS), x, y);
     }
 
-    public Dot(Brain brain) {
+    public Dot(Brain brain, int x, int y) {
         this.brain = brain;
-        position = new Vector(620, 150);
+        position = new Vector(x, y);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Dot implements Drawable {
         position.add(velocity);
     }
 
-    public boolean isStoped() {
+    public boolean isStopped() {
         return stop;
     }
 
@@ -77,10 +77,14 @@ public class Dot implements Drawable {
         this.goalReached = true;
     }
 
+    public Dot toBestDot() {
+        return new BestDot(brain, (int) position.x, (int) position.y);
+    }
+
     static public class BestDot extends Dot {
 
-        public BestDot(Brain brain) {
-            super(brain);
+        public BestDot(Brain brain, int x, int y) {
+            super(brain, x, y);
         }
 
         @Override

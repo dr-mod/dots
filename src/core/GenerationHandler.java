@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 
 public class GenerationHandler {
 
-    private Dot[] dots;
+    private Swarm swarm;
     private Goal goal;
     private Dot bestDot;
 
-    public GenerationHandler(Goal goal, Dot[] dots) {
+    public GenerationHandler(Goal goal, Swarm swarm) {
         this.goal = goal;
-        this.dots = dots;
+        this.swarm = swarm;
     }
 
     public Dot[] naturalSelection() {
-        List<DotHolder> fitnessEnrichedDots = Arrays.stream(dots)
+        List<DotHolder> fitnessEnrichedDots = Arrays.stream(swarm.getDots())
                 .map(dot -> new DotHolder(dot, calculateFitness(dot)))
                 .collect(Collectors.toList());
 
@@ -35,13 +35,13 @@ public class GenerationHandler {
                 .mapToDouble(DotHolder::getFitness)
                 .reduce(0, (x, y) -> x + y);
 
-        Dot[] dots = new Dot[this.dots.length];
+        Dot[] dots = new Dot[this.swarm.getDots().length];
         Dot previousBestDot = bestDot;
-        dots[0] = new Dot.BestDot(previousBestDot.getBrain().cloneBrain());
+        dots[0] = swarm.newDot(previousBestDot.getBrain().cloneBrain()).toBestDot();
 
         for (int i = 1; i < dots.length; i++) {
             DotHolder ancestor = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
-            dots[i] = new Dot(ancestor.getDot().getBrain().mutatedBrain());
+            dots[i] = swarm.newDot(ancestor.getDot().getBrain().mutatedBrain());
         }
 
         return dots;

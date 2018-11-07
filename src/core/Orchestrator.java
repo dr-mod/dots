@@ -18,7 +18,7 @@ public class Orchestrator {
 
     private void setUp() {
         goal = new Goal(130, 650);
-        swarm = new Swarm(150);
+        swarm = new Swarm(150, 620, 150);
         obstacles = new Obstacle[]{
                 new Obstacle(670, 100, 350, 30),
                 new Obstacle(670, 550, 50, 30),

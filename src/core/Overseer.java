@@ -19,7 +19,7 @@ public class Overseer {
 
     public void checkCollisions() {
         for (Dot dot : swarm.getDots()) {
-            if (dot.isStoped()) continue;
+            if (dot.isStopped()) continue;
 
             if (isOutOfBoundaries(dot) || isCollidedObstacle(dot)) {
                 dot.stop();
@@ -31,9 +31,9 @@ public class Overseer {
     }
 
     public void naturalSelection() {
-        GenerationHandler generation = new GenerationHandler(goal, swarm.getDots());
+        GenerationHandler generation = new GenerationHandler(goal, swarm);
         Dot[] dots = generation.naturalSelection();
-        swarm.setNewDots(dots);
+        swarm.replaceDots(dots);
         generation.getBestNumberOfSteps().ifPresent(steps -> System.out.println("Best number of steps: " + steps));
     }
 

@@ -24,7 +24,8 @@ public class Goal implements Drawable, Collidable {
 
     @Override
     public boolean collision(float dotX, float dotY, int radius) {
-        return Vector.dist(new Vector(dotX + radius, dotY + radius), new Vector(x + RADIUS, y + RADIUS)) < RADIUS + radius;
+        return Vector.dist(new Vector(dotX + radius, dotY + radius), new Vector(x + RADIUS, y + RADIUS))
+            < RADIUS + radius;
     }
 
     public int getX() {
