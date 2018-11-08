@@ -1,6 +1,5 @@
 package core;
 
-import model.Brain;
 import model.Dot;
 import model.Goal;
 import utils.Vector;
@@ -48,10 +47,10 @@ public class GenerationHandler {
 
         for (int i = 1; i < dots.length; i++) {
             DotHolder ancestor1 = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
-            DotHolder ancestor2 = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
-            Brain mergedBrain = Brain.mergeBrains(ancestor1.getDot().getBrain(), ancestor2.getDot().getBrain());
+//            DotHolder ancestor2 = randomFitnessBiasedDot(fitnessEnrichedDots, fitnessSum);
+//            Brain mergedBrain = Brain.mergeBrains(ancestor1.getDot().getBrain(), ancestor2.getDot().getBrain());
 
-            dots[i] = swarm.newDot(mergedBrain.mutatedBrain());
+            dots[i] = swarm.newDot(ancestor1.getDot().getBrain().mutatedBrain());
         }
         return dots;
     }
@@ -75,24 +74,24 @@ public class GenerationHandler {
         return dotHolders.get(0);
     }
 
-//    private float calculateFitness(Dot dot) {
-//        float fitness = dot.getPath().stream()
-//                .map((v) -> 1.0f / Vector.dist(v, new Vector(goal.getX(), goal.getY())))
-//                .reduce(0.0f, (accumulator, elem) -> accumulator + elem);
-//
-//        return fitness;
-//    }
-
     private float calculateFitness(Dot dot) {
-        float fitness;
-        if (dot.isGoalReached()) {
-            fitness = (float) (0.0625 + 10000.0 / Math.pow(dot.getBrain().getStep(), 2));
-        } else {
-            float destinationToGoal = Vector.dist(new Vector(dot.getX(), dot.getY()), new Vector(goal.getX(), goal.getY()));
-            fitness = 1 / (destinationToGoal * destinationToGoal);
-        }
+        float fitness = (float) dot.getPath().stream()
+                .mapToDouble((v) -> 1.0 / (double) Math.pow(Vector.dist(v, new Vector(goal.getX(), goal.getY())) , 2) )
+                .average()
+                .getAsDouble();
         return fitness;
     }
+
+//    private float calculateFitness(Dot dot) {
+//        float fitness;
+//        if (dot.isGoalReached()) {
+//            fitness = (float) (0.0625 + 10000.0 / Math.pow(dot.getBrain().getStep(), 2));
+//        } else {
+//            float destinationToGoal = Vector.dist(new Vector(dot.getX(), dot.getY()), new Vector(goal.getX(), goal.getY()));
+//            fitness = 1 / (destinationToGoal * destinationToGoal);
+//        }
+//        return fitness;
+//    }
 
     private class DotHolder {
 
