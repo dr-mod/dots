@@ -9,8 +9,7 @@ import java.util.List;
 
 public class Dot implements Drawable {
 
-    public final static int RADIUS = 2;
-    public final static int DIAMETER = RADIUS * 2;
+    public final static int DOT_RADIUS = 2;
     private final static int MAX_NUMBER_OF_STEPS = 400;
 
     protected Vector position;
@@ -33,7 +32,7 @@ public class Dot implements Drawable {
     @Override
     public void show(Graphics g) {
         g.setColor(Graphics.Color.WHITE);
-        g.oval((int) position.x, (int) position.y, DIAMETER, DIAMETER);
+        g.circle((int) position.x, (int) position.y, DOT_RADIUS);
     }
 
     public void update() {
@@ -99,7 +98,7 @@ public class Dot implements Drawable {
         @Override
         public void show(Graphics g) {
             g.setColor(Graphics.Color.BLUE);
-            g.oval((int) position.x, (int) position.y, DIAMETER * 2, DIAMETER * 2);
+            g.circle((int) position.x, (int) position.y, DOT_RADIUS * 2);
         }
 
     }

@@ -21,6 +21,11 @@ public class GraphicsAwt implements Graphics {
     }
 
     @Override
+    public void circle(int x, int y, int radius) {
+        graphics2D.fillOval(x - radius, y - radius, radius * 2, radius * 2);
+    }
+
+    @Override
     public void text(int x, int y, String text) {
         graphics2D.drawString(text, x, y);
     }

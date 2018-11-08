@@ -23,7 +23,7 @@ public class Overseer {
 
             if (isOutOfBoundaries(dot) || isCollidedObstacle(dot)) {
                 dot.stop();
-            } else if (goal.collision(dot.getX(), dot.getY(), Dot.RADIUS)) {
+            } else if (goal.collision(dot.getX(), dot.getY(), Dot.DOT_RADIUS)) {
                 dot.goalReached();
                 dot.stop();
             }
@@ -38,15 +38,15 @@ public class Overseer {
     }
 
     private boolean isOutOfBoundaries(Dot dot) {
-        return dot.getX() < 0 ||
-                dot.getY() < 0 ||
-                dot.getX() > ConfigHolder.getInstance().getAreaWidth() - Dot.DIAMETER ||
-                dot.getY() > ConfigHolder.getInstance().getAreaHeight() - Dot.DIAMETER;
+        return dot.getX() < Dot.DOT_RADIUS ||
+                dot.getY() < Dot.DOT_RADIUS ||
+                dot.getX() > ConfigHolder.getInstance().getAreaWidth() - Dot.DOT_RADIUS ||
+                dot.getY() > ConfigHolder.getInstance().getAreaHeight() - Dot.DOT_RADIUS;
     }
 
     private boolean isCollidedObstacle(Dot dot) {
         for (Obstacle obstacle : obstacles) {
-            if (obstacle.collision(dot.getX(), dot.getY(), Dot.RADIUS)) {
+            if (obstacle.collision(dot.getX(), dot.getY(), Dot.DOT_RADIUS)) {
                 return true;
             }
         }
