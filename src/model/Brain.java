@@ -30,11 +30,7 @@ public class Brain {
     }
 
     public Brain cloneBrain() {
-        Vector[] newDirections = new Vector[this.directions.length];
-        for (int i = 0; i < newDirections.length; i++) {
-            newDirections[i] = this.directions[i].copy();
-        }
-        return new Brain(newDirections);
+        return new Brain(directions.clone());
     }
 
     public static Brain mergeBrains(Brain brain, Brain brain2) {

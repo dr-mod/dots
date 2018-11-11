@@ -47,9 +47,8 @@ public class Dot implements Drawable {
             return;
         }
 
-        velocity.add(brain.nextStep());
-        velocity.limit(4);
-        position.add(velocity);
+        velocity = velocity.add(brain.nextStep()).limit(4);
+        position = position.add(velocity);
     }
 
     public boolean isStopped() {

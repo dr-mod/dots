@@ -4,43 +4,22 @@ import java.io.Serializable;
 
 public class Vector implements Serializable {
 
-    public float x;
-
-    public float y;
-
-    public Vector() {
-    }
+    public final float x;
+    public final float y;
 
     public Vector(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public Vector set(float x, float y) {
-        this.x = x;
-        this.y = y;
-        return this;
-    }
-
     static public Vector fromAngle(float angle) {
-        return fromAngle(angle, null);
-    }
-
-
-    static public Vector fromAngle(float angle, Vector target) {
-        if (target == null) {
-            target = new Vector((float) Math.cos(angle), (float) Math.sin(angle));
-        } else {
-            target.set((float) Math.cos(angle), (float) Math.sin(angle));
-        }
-        return target;
+        return new Vector((float) Math.cos(angle), (float) Math.sin(angle));
     }
 
     public Vector rotate(float theta) {
-        float temp = x;
-        x = x * (float) Math.cos(theta) - y * (float) Math.sin(theta);
-        y = temp * (float) Math.sin(theta) + y * (float) Math.cos(theta);
-        return this;
+        float newX = x * (float) Math.cos(theta) - y * (float) Math.sin(theta);
+        float newY = x * (float) Math.sin(theta) + y * (float) Math.cos(theta);
+        return new Vector(newX, newY);
     }
 
     public Vector copy() {
@@ -67,28 +46,15 @@ public class Vector implements Serializable {
     }
 
     public Vector add(Vector v) {
-        x += v.x;
-        y += v.y;
-        return this;
+        return new Vector(x + v.x, y + v.y);
     }
 
     public Vector add(float x, float y) {
-        this.x += x;
-        this.y += y;
-        return this;
+        return new Vector(this.x + x, this.y + y);
     }
 
     static public Vector add(Vector v1, Vector v2) {
-        return add(v1, v2, null);
-    }
-
-    static public Vector add(Vector v1, Vector v2, Vector target) {
-        if (target == null) {
-            target = new Vector(v1.x + v2.x, v1.y + v2.y);
-        } else {
-            target.set(v1.x + v2.x, v1.y + v2.y);
-        }
-        return target;
+        return new Vector(v1.x + v2.x, v1.y + v2.y);
     }
 
     public float dist(Vector v) {
@@ -116,87 +82,51 @@ public class Vector implements Serializable {
     }
 
     public Vector normalize(Vector target) {
-        if (target == null) {
-            target = new Vector();
-        }
         float m = mag();
         if (m > 0) {
-            target.set(x / m, y / m);
+            return new Vector(x / m, y / m);
         } else {
-            target.set(x, y);
+            return new Vector(x, y);
         }
-        return target;
     }
 
     public Vector mult(float n) {
-        x *= n;
-        y *= n;
-        return this;
+        return new Vector(x * n, y * n);
     }
 
     static public Vector mult(Vector v, float n) {
-        return mult(v, n, null);
-    }
-
-    static public Vector mult(Vector v, float n, Vector target) {
-        if (target == null) {
-            target = new Vector(v.x * n, v.y * n);
-        } else {
-            target.set(v.x * n, v.y * n);
-        }
-        return target;
+        return new Vector(v.x * n, v.y * n);
     }
 
     public Vector limit(float max) {
         if (magSq() > max * max) {
-            normalize();
-            mult(max);
+            return normalize().mult(max);
         }
-        return this;
+        return new Vector(x, y);
     }
 
     public Vector normalize() {
         float m = mag();
         if (m != 0 && m != 1) {
-            div(m);
+            return div(m);
         }
-        return this;
+        return new Vector(x, y);
     }
 
     public Vector div(float n) {
-        x /= n;
-        y /= n;
-        return this;
+        return new Vector(x / n, y / n);
     }
 
     static public Vector div(Vector v, float n) {
-        return div(v, n, null);
-    }
-
-    static public Vector div(Vector v, float n, Vector target) {
-        if (target == null) {
-            target = new Vector(v.x / n, v.y / n);
-        } else {
-            target.set(v.x / n, v.y / n);
-        }
-        return target;
+        return new Vector(v.x / n, v.y / n);
     }
 
     public Vector setMag(float len) {
-        normalize();
-        mult(len);
-        return this;
-    }
-
-    public Vector setMag(Vector target, float len) {
-        target = normalize(target);
-        target.mult(len);
-        return target;
+        return normalize().mult(len);
     }
 
     public float heading() {
-        float angle = (float) Math.atan2(y, x);
-        return angle;
+        return (float) Math.atan2(y, x);
     }
 
     @Override
